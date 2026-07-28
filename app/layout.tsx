@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Navbar from "@/components/shared/navbar";
+import Footer from "@/components/shared/footer";
 
 
 
@@ -23,13 +24,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
 
-        <Toaster position="top-right" richColors/>
+        <Toaster position="top-right" richColors />
 
-        <Navbar/>
-        
+        <Navbar />
+
         {children}
 
-        </body>
+        
+        <Footer />
+      </body>
     </html>
   );
 }
