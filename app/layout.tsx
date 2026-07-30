@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Navbar from "@/components/shared/navbar";
 import Footer from "@/components/shared/footer";
+import { getCurrentUser } from "@/service/auth";
 
 
 
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
   description: "Find your dream home with our real estate platform",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const user = await getCurrentUser()
   return (
     <html
       lang="en"
@@ -26,7 +29,7 @@ export default function RootLayout({
 
         <Toaster position="top-right" richColors />
 
-        <Navbar />
+        <Navbar user={user}/>
 
         {children}
 
