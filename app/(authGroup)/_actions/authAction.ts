@@ -63,7 +63,7 @@ export const loginAction = async (
     redirect(redirectTo)
   }
 
-  redirect("/")
+  redirect("/dashboard")
 }
 
 export const registerAction = async (

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
-import type { RentalRequest } from "@/types/rental"
+import { RentalRequest } from "@/types/auth"
 
 async function authHeader() {
   const cookieStore = await cookies()

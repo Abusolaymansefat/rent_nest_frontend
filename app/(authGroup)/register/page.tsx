@@ -13,12 +13,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-emerald-50 px-4">
       <div className="w-full max-w-md">
         <RegisterForm />
-        <div className="mt-6 text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-blue-600 hover:underline">
-            Sign in
-          </Link>
-        </div>
+        
       </div>
     </div>
   )
