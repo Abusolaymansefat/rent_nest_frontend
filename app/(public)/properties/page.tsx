@@ -3,10 +3,6 @@ import { PropertyFilters } from "../_components/properties/property-filters"
 import { getProperties } from "../_actions/properties"
 import { PropertyGridSkeleton } from "../_components/properties/property-grid-skeleton"
 import { PropertyGrid } from "../_components/properties/property-grid"
-// import { getProperties } from "@/service/properties"
-// import { PropertyGrid } from "@/components/properties/property-grid"
-// import { PropertyFilters } from "@/components/properties/property-filters"
-// import { PropertyGridSkeleton } from "@/components/properties/property-grid-skeleton"
 
 type SearchParams = {
   location?: string

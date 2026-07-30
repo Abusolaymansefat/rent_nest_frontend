@@ -106,3 +106,36 @@ export type PaginatedResponse<T> = {
     totalPages: number
   }
 }
+
+
+export type RentalRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED"
+
+export type RentalRequest = {
+  id: string
+  propertyId: string
+  tenantId: string
+  status: RentalRequestStatus
+  moveInDate: string
+  message: string | null
+  createdAt: string
+  property: {
+    id: string
+    title: string
+    images: string[]
+    price: number
+    location: string
+  }
+  payment?: {
+    id: string
+    status: "PENDING" | "PAID" | "FAILED"
+    amount: number
+  } | null
+}
+
+export type Payment = {
+  id: string
+  rentalRequestId: string
+  amount: number
+  status: "PENDING" | "PAID" | "FAILED"
+  createdAt: string
+}

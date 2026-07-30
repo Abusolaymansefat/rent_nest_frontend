@@ -2,7 +2,7 @@
 
 import { Category, PaginatedResponse, Property, PropertyFilters } from "@/types/auth"
 
-export async function getProperties(filters: PropertyFilters): Promise<PaginatedResponse<Property>> {
+export async function getProperties(filters: PropertyFilters = {}): Promise<PaginatedResponse<Property>> {
   const params = new URLSearchParams()
   if (filters.location) params.set("location", filters.location)
   if (filters.minPrice) params.set("minPrice", filters.minPrice)
