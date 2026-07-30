@@ -1,6 +1,8 @@
 import BannerSection 
 from "@/components/home/banner-section"
 import WhyChooseUs from "@/components/home/WhyChooseUs"
+import PropertiesPage from "./(public)/properties/page"
+
 
 
 
@@ -11,6 +13,7 @@ return (
 <main>
 
 <BannerSection/>
+<PropertiesPage/>
 
 <WhyChooseUs/>
 

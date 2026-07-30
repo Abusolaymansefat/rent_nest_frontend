@@ -1,15 +1,13 @@
-import Navbar from '@/components/shared/navbar'
+// import Navbar from '@/components/shared/navbar'
 import React from 'react'
-// import { getServerSession } from 'next-auth'
-// import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { CurrentUser } from '@/service/auth'
+// import { getCurrentUser } from '@/service/auth'
 
 const DashboardLayout = async ({children }: {children: React.ReactNode}) => {
-  const user: CurrentUser | null = null
+  // const user = await getCurrentUser()
   
   return (
     <div>
-      <Navbar user={user} />
+      {/* <Navbar user={user} /> */}
        {children}
     </div>
   )

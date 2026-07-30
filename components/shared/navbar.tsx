@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
-import { CurrentUser } from "@/service/auth"
+import { CurrentUser } from "@/types/auth"
+import { logoutAction } from "@/service/auth"
 import { toast } from "sonner"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -23,9 +24,9 @@ const navLinks = [
 ]
 
 const dashboardHrefByRole: Record<string, string> = {
-  Tenant: "/tenant-dashboard",
-  Landlord: "/landlord-dashboard",
-  Admin: "/admin-dashboard",
+  TENANT: "/tenant-dashboard",
+  LANDLORD: "/landlord-dashboard",
+  ADMIN: "/admin-dashboard",
 }
 
 export default function Navbar({ user }: { user: CurrentUser | null }) {
@@ -35,14 +36,14 @@ export default function Navbar({ user }: { user: CurrentUser | null }) {
   const dashboardHref = user ? dashboardHrefByRole[user.role] ?? "/dashboard" : "/dashboard"
 
   const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
+    ? user.name.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase()
     : "?"
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
 
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await logoutAction()
       toast.success("Logout successful")
       router.push("/login")
       router.refresh()
@@ -106,7 +107,7 @@ export default function Navbar({ user }: { user: CurrentUser | null }) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="lg" className="rounded-full">
                   <Avatar>
-                    <AvatarImage src={user.image} />
+                    <AvatarImage src={user.avatar || undefined} />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                 </Button>

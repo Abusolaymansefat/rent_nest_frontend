@@ -2,11 +2,7 @@
 
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-
-export type FormState = {
-  success: boolean
-  message?: string
-}
+import type { FormState, LoginApiResponse, RegisterApiResponse } from "@/types/auth"
 
 export const loginAction = async (
   redirectTo: string,
@@ -20,7 +16,7 @@ export const loginAction = async (
     return { success: false, message: "Email and password are required" }
   }
 
-  let result
+  let result: LoginApiResponse
   try {
     const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
       method: "POST",
@@ -28,11 +24,14 @@ export const loginAction = async (
       body: JSON.stringify({ email, password }),
     })
     result = await res.json()
-  } catch {
+    console.log("Login API response:", result)
+  } catch (error) {
+    console.error("Login API error:", error)
     return { success: false, message: "Server error, please try again" }
   }
 
-  if (!result.success) {
+  if (!result.success || !result.data) {
+    console.log("Login failed - success:", result.success, "data:", result.data, "message:", result.message)
     return { success: false, message: result.message || "Login failed" }
   }
 
@@ -44,13 +43,16 @@ export const loginAction = async (
     path: "/",
     maxAge: 60 * 60 * 24,
   })
-  cookieStore.set("refreshToken", result.data.refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  })
+  
+  if (result.data.refreshToken) {
+    cookieStore.set("refreshToken", result.data.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    })
+  }
 
   if (
     redirectTo &&
@@ -90,7 +92,7 @@ export const registerAction = async (
 
   const name = `${firstName} ${lastName}`.trim()
 
-  let result
+  let result: RegisterApiResponse
   try {
     const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/register`, {
       method: "POST",

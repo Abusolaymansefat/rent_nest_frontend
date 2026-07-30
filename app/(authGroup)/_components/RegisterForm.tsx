@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FormState, registerAction } from "../_actions/authAction"
-// import { registerAction, type FormState } from "@/app/actions/auth"
+
 
 const initialState: FormState = { success: false }
 
