@@ -1,10 +1,9 @@
-import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
+"use server"
 
-export async function POST() {
+import { cookies } from "next/headers"
+
+export async function logoutAction() {
   const cookieStore = await cookies()
   cookieStore.delete("accessToken")
   cookieStore.delete("refreshToken")
-  
-  return NextResponse.json({ success: true }, { status: 200 })
 }

@@ -1,24 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import jwt from "jsonwebtoken";
-
-
-const verifyToken = (token: string, secret: string) => {
-    try {
-        const verifiedToken = jwt.verify(token, secret);
-        return {
-            success: true,
-            data: verifiedToken
-        };
-    } catch (error: any) {
-        console.log("Token verification failed:", error);
-        return {
-            success: false,
-            error: error.message
-        }
-    }
-}
-
-
-export const jwtUtils = {
-    verifyToken
+export function decodeJWT(token: string): Record<string, unknown> | null {
+  try {
+    const base64Url = token.split(".")[1]
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/")
+    const jsonPayload = Buffer.from(base64, "base64").toString("utf-8")
+    return JSON.parse(jsonPayload)
+  } catch {
+    return null
+  }
 }

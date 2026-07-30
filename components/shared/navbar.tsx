@@ -10,10 +10,7 @@ import {
   Settings,
   User,
   LayoutDashboard,
-  Boxes,
-  BookOpen,
   Loader2,
-  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -26,27 +23,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
-import { logoutAction } from "@/service/auth"
 import { toast } from "sonner"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { CurrentUser } from "@/types/auth"
+import { logoutAction } from "@/service/logout"
+// import { logoutAction } from "@/service/auth"
 
 // --- Types ---
-type UserRole = "TENANT" | "LANDLORD" | "ADMIN"
-
-type NavbarUser = {
-  id?: string
-  name?: string
-  email?: string
-  avatar?: string
-  role?: UserRole
-  profile?: {
-    profilePhoto?: string
-  }
-}
-
 type NavbarProps = {
-  user: NavbarUser | null
+  user: CurrentUser | null
 }
 
 // --- Config ---
@@ -76,7 +62,7 @@ export default function Navbar({ user }: NavbarProps) {
   // User display info
   const displayName = user?.name ?? "Guest"
   const displayEmail = user?.email ?? "Not signed in"
-  const avatarUrl = user?.profile?.profilePhoto || user?.avatar || undefined
+  const avatarUrl = user?.avatar || undefined
 
   const initials = user?.name
     ? user.name

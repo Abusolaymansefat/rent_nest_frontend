@@ -5,13 +5,14 @@ import { useActionState } from "react"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FormState, loginAction } from "../_actions/authAction"
+import { FormState } from "@/types/auth"
+import { loginAction } from "../_actions/authAction"
+
 
 const initialState: FormState = { success: false }
 
-export function LoginForm({ redirectTo = "/" }: { redirectTo?: string }) {
-  const boundLoginAction = loginAction.bind(null, redirectTo)
-  const [state, formAction, isPending] = useActionState(boundLoginAction, initialState)
+export function LoginForm() {
+  const [state, formAction, isPending] = useActionState(loginAction, initialState)
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6">

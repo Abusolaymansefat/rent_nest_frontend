@@ -3,9 +3,15 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import type { FormState, LoginApiResponse, RegisterApiResponse } from "@/types/auth"
+import { decodeJWT } from "@/utils/jwt"
+
+const dashboardByRole: Record<string, string> = {
+  ADMIN: "/admin-dashboard",
+  LANDLORD: "/landlord-dashboard",
+  TENANT: "/tenant-dashboard",
+}
 
 export const loginAction = async (
-  redirectTo: string,
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> => {
@@ -24,16 +30,17 @@ export const loginAction = async (
       body: JSON.stringify({ email, password }),
     })
     result = await res.json()
-    console.log("Login API response:", result)
-  } catch (error) {
-    console.error("Login API error:", error)
+  } catch {
     return { success: false, message: "Server error, please try again" }
   }
 
-  if (!result.success || !result.data) {
-    console.log("Login failed - success:", result.success, "data:", result.data, "message:", result.message)
+  if (!result.success || !result.data?.accessToken) {
     return { success: false, message: result.message || "Login failed" }
   }
+
+  const decoded = decodeJWT(result.data.accessToken)
+  const role = decoded?.role ?? "TENANT"
+  const dashboardUrl = dashboardByRole[role] || "/dashboard"
 
   const cookieStore = await cookies()
   cookieStore.set("accessToken", result.data.accessToken, {
@@ -43,7 +50,7 @@ export const loginAction = async (
     path: "/",
     maxAge: 60 * 60 * 24,
   })
-  
+
   if (result.data.refreshToken) {
     cookieStore.set("refreshToken", result.data.refreshToken, {
       httpOnly: true,
@@ -54,16 +61,7 @@ export const loginAction = async (
     })
   }
 
-  if (
-    redirectTo &&
-    typeof redirectTo === "string" &&
-    redirectTo.startsWith("/") &&
-    !redirectTo.startsWith("//")
-  ) {
-    redirect(redirectTo)
-  }
-
-  redirect("/dashboard")
+  redirect(dashboardUrl)
 }
 
 export const registerAction = async (
