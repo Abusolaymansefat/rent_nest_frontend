@@ -139,3 +139,33 @@ export type Payment = {
   status: "PENDING" | "PAID" | "FAILED"
   createdAt: string
 }
+
+export type PlatformUser = {
+  id: string
+  name: string
+  email: string
+  phone: string | null
+  avatar: string | null
+  role: "TENANT" | "LANDLORD" | "ADMIN"
+  isBanned: boolean
+  createdAt: string
+}
+
+export type PlatformStats = {
+  totalUsers: number
+  totalProperties: number
+  pendingRequests: number
+  totalRevenue: number
+}
+
+export type PaginatedUsers = {
+  success: boolean
+  message: string
+  data: PlatformUser[]
+  meta?: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
