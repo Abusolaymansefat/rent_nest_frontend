@@ -6,9 +6,9 @@ import type { FormState, LoginApiResponse, RegisterApiResponse } from "@/types/a
 import { decodeJWT } from "@/utils/jwt"
 
 const dashboardByRole: Record<string, string> = {
-  ADMIN: "/admin-dashboard",
-  LANDLORD: "/landlord-dashboard",
-  TENANT: "/tenant-dashboard",
+  ADMIN: "/dashboard/admin",
+  LANDLORD: "/dashboard/landlord",
+  TENANT: "/dashboard/tenant",
 }
 
 export const loginAction = async (
@@ -39,7 +39,7 @@ export const loginAction = async (
   }
 
   const decoded = decodeJWT(result.data.accessToken)
-  const role = decoded?.role ?? "TENANT"
+  const role = (decoded?.role ?? "TENANT") as keyof typeof dashboardByRole
   const dashboardUrl = dashboardByRole[role] || "/dashboard"
 
   const cookieStore = await cookies()

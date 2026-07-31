@@ -14,7 +14,7 @@ export default async function LandlordPropertiesPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">My Properties</h1>
         <Button asChild className="rounded-full">
-          <Link href="/dashboard/landlord/properties/new">
+          <Link href="/landlord/properties/new">
             <Plus className="mr-2 h-4 w-4" /> Add Property
           </Link>
         </Button>

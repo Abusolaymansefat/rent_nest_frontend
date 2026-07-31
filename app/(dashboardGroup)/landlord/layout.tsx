@@ -6,7 +6,7 @@ import { DashboardShell } from "../_components/dashboard/dashboard-shell"
 export default async function LandlordLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
 
-  if (!user) redirect("/login?redirectTo=/dashboard/landlord")
+  if (!user) redirect("/login?redirectTo=/landlord")
   if (user.role !== "LANDLORD") redirect("/")
 
   return <DashboardShell role="LANDLORD">{children}</DashboardShell>

@@ -14,7 +14,7 @@ export default function PaymentCancelPage() {
             Your payment was not completed. You can try again anytime from your dashboard.
           </p>
           <Button asChild className="w-full rounded-full">
-            <Link href="/dashboard/tenant">Back to Dashboard</Link>
+            <Link href="/tenant">Back to Dashboard</Link>
           </Button>
         </CardContent>
       </Card>

@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import {
-  Building2,
   Heart,
   House,
   LogOut,
@@ -11,6 +10,7 @@ import {
   User,
   LayoutDashboard,
   Loader2,
+  Building2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -28,7 +28,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { CurrentUser } from "@/types/auth"
 import { logoutAction } from "@/service/logout"
-// import { logoutAction } from "@/service/auth"
 
 // --- Types ---
 type NavbarProps = {
@@ -38,14 +37,13 @@ type NavbarProps = {
 // --- Config ---
 const navLinks = [
   { name: "Home", href: "/", icon: House },
-  { name: "Properties", href: "/properties", icon: Building2 },
-  { name: "Categories", href: "/categories", icon: Building2 }
+  { name: "Properties", href: "/properties", icon: Building2 }
 ]
 
 const dashboardHrefByRole: Record<string, string> = {
-  TENANT: "/tenant-dashboard",
-  LANDLORD: "/landlord-dashboard",
-  ADMIN: "/admin-dashboard",
+  TENANT: "/tenant",
+  LANDLORD: "/landlord",
+  ADMIN: "/admin",
 }
 
 // --- Component ---

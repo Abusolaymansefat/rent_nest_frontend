@@ -10,7 +10,7 @@ export default async function PayPage({ params }: { params: Promise<{ id: string
 
   if (!request) notFound()
   if (request.status !== "APPROVED") {
-    redirect("/dashboard/tenant")
+    redirect("/tenant")
   }
 
   return (

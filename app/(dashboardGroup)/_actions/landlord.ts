@@ -3,8 +3,9 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
-import type { Property } from "@/types/property"
-import type { RentalRequest } from "@/types/rental"
+import { Property, RentalRequest } from "@/types/auth"
+// import type { Property } from "@/types/property"
+// import type { RentalRequest } from "@/types/rental"
 
 async function authHeader() {
   const cookieStore = await cookies()
@@ -42,7 +43,6 @@ export async function getMyRequests(): Promise<RentalRequest[]> {
   return json.data
 }
 
-// ---------------- PROPERTY FORM STATE ----------------
 export type PropertyFormState = {
   success: boolean
   message?: string
@@ -100,7 +100,7 @@ export async function createProperty(
     return { success: false, message: result.message || "Could not create property" }
   }
 
-  redirect("/dashboard/landlord/properties")
+  redirect("/landlord/properties")
 }
 
 export async function updateProperty(
@@ -126,7 +126,7 @@ export async function updateProperty(
     return { success: false, message: result.message || "Could not update property" }
   }
 
-  revalidatePath("/dashboard/landlord/properties")
+  revalidatePath("/landlord/properties")
   return { success: true, message: "Property updated" }
 }
 
@@ -145,7 +145,7 @@ export async function deleteProperty(propertyId: string): Promise<{ success: boo
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/landlord/properties")
+  revalidatePath("/landlord/properties")
   return { success: true }
 }
 
@@ -168,7 +168,7 @@ export async function toggleAvailability(
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/landlord/properties")
+  revalidatePath("/landlord/properties")
   return { success: true }
 }
 
@@ -191,6 +191,6 @@ export async function updateRequestStatus(
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/landlord/requests")
+  revalidatePath("/landlord/requests")
   return { success: true }
 }

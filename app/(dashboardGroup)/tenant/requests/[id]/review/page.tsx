@@ -1,8 +1,7 @@
 import { getMyRentalRequests } from "@/app/(dashboardGroup)/_actions/rentals"
 import { ReviewForm } from "@/app/(dashboardGroup)/_components/rentals/review-form"
 import { notFound, redirect } from "next/navigation"
-// import { getMyRentalRequests } from "@/service/rentals"
-// import { ReviewForm } from "@/components/dashboard/review-form"
+
 
 export default async function ReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -11,7 +10,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
 
   if (!request) notFound()
   if (request.status !== "ACTIVE" && request.status !== "COMPLETED") {
-    redirect("/dashboard/tenant")
+    redirect("/tenant")
   }
 
   return (

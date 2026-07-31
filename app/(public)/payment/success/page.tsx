@@ -23,7 +23,7 @@ export default async function PaymentSuccessPage({
             <p className="text-xs text-muted-foreground">Reference: {session_id}</p>
           )}
           <Button asChild className="w-full rounded-full">
-            <Link href="/dashboard/tenant">Go to Dashboard</Link>
+            <Link href="/tenant">Go to Dashboard</Link>
           </Button>
         </CardContent>
       </Card>

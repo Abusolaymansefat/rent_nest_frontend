@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Property } from "@/types/auth"
 import { deleteProperty, toggleAvailability } from "../../_actions/landlord"
-// import { toggleAvailability, deleteProperty } from "@/service/landlord"
-// import type { Property } from "@/types/property"
+
 
 export function LandlordPropertyRow({ property }: { property: Property }) {
   const [isAvailable, setIsAvailable] = useState(property.availability === "AVAILABLE")
@@ -72,7 +71,7 @@ export function LandlordPropertyRow({ property }: { property: Property }) {
       <Switch checked={isAvailable} onCheckedChange={handleToggle} disabled={isPending} />
 
       <Button variant="ghost" size="icon" asChild>
-        <Link href={`/dashboard/landlord/properties/${property.id}/edit`}>
+        <Link href={`/landlord/properties/${property.id}/edit`}>
           <Pencil className="h-4 w-4" />
         </Link>
       </Button>

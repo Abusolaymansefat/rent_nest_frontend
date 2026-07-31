@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { StatusBadge } from "./status-badge"
 import { RentalRequest } from "@/types/auth"
-// import type { RentalRequest } from "@/types/rental"
+
 
 export function RentalRequestCard({ request }: { request: RentalRequest }) {
   return (
@@ -34,12 +34,12 @@ export function RentalRequestCard({ request }: { request: RentalRequest }) {
         <div className="shrink-0">
           {request.status === "APPROVED" && (
             <Button asChild className="rounded-full">
-              <Link href={`/dashboard/tenant/requests/${request.id}/pay`}>Pay Now</Link>
+              <Link href={`/tenant/requests/${request.id}/pay`}>Pay Now</Link>
             </Button>
           )}
           {request.status === "ACTIVE" && (
             <Button asChild variant="outline" className="rounded-full">
-              <Link href={`/dashboard/tenant/requests/${request.id}/review`}>Leave Review</Link>
+              <Link href={`/tenant/requests/${request.id}/review`}>Leave Review</Link>
             </Button>
           )}
         </div>

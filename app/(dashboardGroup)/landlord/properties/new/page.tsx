@@ -1,5 +1,5 @@
-import { PropertyForm } from "@/components/dashboard/property-form"
-import { createProperty } from "@/service/landlord"
+import { PropertyForm } from "@/app/(dashboardGroup)/_components/landlord/property-form"
+import { createProperty } from "@/app/(dashboardGroup)/_actions/landlord"
 
 export default function NewPropertyPage() {
   return (

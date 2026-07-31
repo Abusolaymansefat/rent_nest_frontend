@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
-import { PropertyForm } from "@/components/dashboard/property-form"
-import { getMyPropertyById, updateProperty } from "@/service/landlord"
+import { PropertyForm } from "@/app/(dashboardGroup)/_components/landlord/property-form"
+import { getMyPropertyById, updateProperty } from "@/app/(dashboardGroup)/_actions/landlord"
 
 export default async function EditPropertyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

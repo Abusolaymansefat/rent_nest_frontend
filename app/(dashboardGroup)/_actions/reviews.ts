@@ -38,6 +38,6 @@ export async function submitReview(
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/tenant")
+  revalidatePath("/tenant")
   return { success: true, message: "Review submitted, thank you!" }
 }
