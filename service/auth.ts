@@ -24,6 +24,6 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     email: decoded.email as string,
     phone: decoded.phone as string | null,
     avatar: decoded.avatar as string | null,
-    role: decoded.role as string,
+    role: decoded.role as string | "TENANT",
   }
 }

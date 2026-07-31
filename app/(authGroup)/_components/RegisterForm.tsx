@@ -5,7 +5,8 @@ import { useActionState } from "react"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FormState, registerAction } from "../_actions/authAction"
+import { registerAction } from "../_actions/authAction"
+import { FormState } from "@/types/auth"
 
 
 const initialState: FormState = { success: false }
