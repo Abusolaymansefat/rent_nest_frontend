@@ -6,9 +6,9 @@ import type { FormState, LoginApiResponse, RegisterApiResponse } from "@/types/a
 import { decodeJWT } from "@/utils/jwt"
 
 const dashboardByRole: Record<string, string> = {
-  ADMIN: "/dashboard/admin",
-  LANDLORD: "/dashboard/landlord",
-  TENANT: "/dashboard/tenant",
+  ADMIN: "/admin",
+  LANDLORD: "/landlord",
+  TENANT: "/tenant",
 }
 
 export const loginAction = async (

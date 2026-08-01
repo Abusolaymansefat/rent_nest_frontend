@@ -32,7 +32,8 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/categories`, {
+  const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
+  const res = await fetch(`${apiUrl}/api/categories`, {
     next: { revalidate: 3600 },
   })
   if (!res.ok) return []

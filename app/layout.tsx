@@ -25,7 +25,7 @@ export default async function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased")}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
 
         <Toaster position="top-right" richColors />
 

@@ -1,11 +1,12 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import type { Property } from "@/types/property"
-import type { PropertyFormState } from "@/service/landlord"
+import type { Property } from "@/types/auth"
+import type { PropertyFormState } from "../../_actions/landlord"
+import { getCategories } from "@/app/(public)/_actions/properties"
 
 const propertyTypes = ["APARTMENT", "HOUSE", "STUDIO", "CONDO", "VILLA"]
 
@@ -19,6 +20,22 @@ export function PropertyForm({
   submitLabel: string
 }) {
   const [state, formAction, isPending] = useActionState(action, { success: false })
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
+  const [loadingCategories, setLoadingCategories] = useState(true)
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const data = await getCategories()
+        setCategories(data)
+      } catch (error) {
+        console.error("Failed to load categories:", error)
+      } finally {
+        setLoadingCategories(false)
+      }
+    }
+    loadCategories()
+  }, [])
 
   return (
     <Card>
@@ -101,11 +118,26 @@ export function PropertyForm({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="categoryId" className="text-sm font-medium">Category ID</label>
-            <input
-              id="categoryId" name="categoryId" defaultValue={property?.categoryId} required disabled={isPending}
-              className="w-full rounded-full border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-60"
-            />
+            <label htmlFor="categoryId" className="text-sm font-medium">Category</label>
+            {loadingCategories ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading categories...
+              </div>
+            ) : (
+              <select
+                id="categoryId" name="categoryId" defaultValue={property?.categoryId} required disabled={isPending}
+                className="w-full rounded-full border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-60"
+              >
+                <option value="">Select a category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            )}
+            {categories.length === 0 && !loadingCategories && (
+              <p className="text-xs text-red-500">No categories available. Please create categories first.</p>
+            )}
           </div>
 
           <div className="space-y-2">

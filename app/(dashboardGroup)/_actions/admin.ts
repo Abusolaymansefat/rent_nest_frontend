@@ -2,9 +2,7 @@
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
-import type { PlatformStats, PaginatedUsers } from "@/types/admin"
-import type { Property } from "@/types/property"
-import type { RentalRequest } from "@/types/rental"
+import { PaginatedUsers, PlatformStats, Property, RentalRequest } from "@/types/auth"
 
 async function authHeader() {
   const cookieStore = await cookies()
@@ -48,7 +46,7 @@ export async function toggleUserBan(userId: string, isBanned: boolean): Promise<
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/admin/users")
+  revalidatePath("/admin/users")
   return { success: true }
 }
 
@@ -84,6 +82,24 @@ export async function removeProperty(propertyId: string): Promise<{ success: boo
     return { success: false, message: "Server error, please try again" }
   }
 
-  revalidatePath("/dashboard/admin/moderation")
+  revalidatePath("/admin/manage-posts")
+  return { success: true }
+}
+
+export async function deleteAllProperties(): Promise<{ success: boolean; message?: string }> {
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/admin/properties`, {
+      method: "DELETE",
+      headers: await authHeader(),
+    })
+    const result = await res.json()
+    if (!result.success) return { success: false, message: result.message || "Could not delete all properties" }
+  } catch {
+    return { success: false, message: "Server error, please try again" }
+  }
+
+  revalidatePath("/admin/moderation")
+  revalidatePath("/admin/properties")
+  revalidatePath("/properties")
   return { success: true }
 }

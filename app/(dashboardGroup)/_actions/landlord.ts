@@ -4,8 +4,6 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { Property, RentalRequest } from "@/types/auth"
-// import type { Property } from "@/types/property"
-// import type { RentalRequest } from "@/types/rental"
 
 async function authHeader() {
   const cookieStore = await cookies()
