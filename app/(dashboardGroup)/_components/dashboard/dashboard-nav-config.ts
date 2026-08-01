@@ -1,5 +1,6 @@
 import {
   LayoutDashboard, Building2, ClipboardList, User, Settings, CreditCard, Users, ShieldCheck, Trash2,
+  Tag,
 } from "lucide-react"
 import type { Role } from "@/types/auth"
 
@@ -28,6 +29,7 @@ export const dashboardNavByRole: Record<Role, NavItem[]> = {
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
     { label: "Users", href: "/admin/users", icon: Users },
     { label: "Properties", href: "/admin/properties", icon: Building2 },
+    { label: "Categories", href: "/admin/categories", icon: Tag },
     { label: "Manage Posts", href: "/admin/manage-posts", icon: Trash2 },
     { label: "Moderation", href: "/admin/moderation", icon: ShieldCheck },
   ],

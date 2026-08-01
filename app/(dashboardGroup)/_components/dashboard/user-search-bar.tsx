@@ -9,13 +9,13 @@ export function UserSearchBar() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [value, setValue] = React.useState(searchParams.get("search") ?? "")
+  const [value, setValue] = React.useState(searchParams.get("searchTerm") ?? "")
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       const params = new URLSearchParams(searchParams)
-      if (value) params.set("search", value)
-      else params.delete("search")
+      if (value) params.set("searchTerm", value)
+      else params.delete("searchTerm")
       params.delete("page")
       router.push(`${pathname}?${params.toString()}`)
     }, 400)

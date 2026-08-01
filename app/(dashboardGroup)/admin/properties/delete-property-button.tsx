@@ -3,13 +3,14 @@
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
-import { removeProperty } from "../../_actions/admin"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { deleteProperty } from "../../_actions/admin"
+
 
 export function DeletePropertyButton({ propertyId, title }: { propertyId: string; title: string }) {
   const [isDeleting, setIsDeleting] = useState(false)
@@ -18,7 +19,7 @@ export function DeletePropertyButton({ propertyId, title }: { propertyId: string
   const handleDelete = async () => {
     try {
       setIsDeleting(true)
-      const result = await removeProperty(propertyId)
+      const result = await deleteProperty(propertyId)
       if (result.success) {
         toast.success("Property deleted successfully")
         router.refresh()

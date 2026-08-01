@@ -8,10 +8,12 @@ import { UserPagination } from "../../_components/dashboard/user-pagination";
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; page?: string }>
+  searchParams: Promise<{ searchTerm?: string; page?: string }>
 }) {
   const params = await searchParams
   const { data: users, meta } = await getUsers(params)
+
+  const totalPages = meta ? Math.ceil(meta.total / meta.limit) : 1
 
   return (
     <>
@@ -46,7 +48,7 @@ export default async function AdminUsersPage({
         </CardContent>
       </Card>
 
-      {meta && <UserPagination page={meta.page} totalPages={meta.totalPages} />}
+      {meta && <UserPagination page={meta.page} totalPages={totalPages} />}
     </>
   )
 }

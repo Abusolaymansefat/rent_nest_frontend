@@ -11,26 +11,28 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { PlatformUser } from "@/types/auth"
-import { toggleUserBan } from "../../_actions/admin"
+import { updateUserStatus } from "../../_actions/admin"
+
 
 export function UserRow({ user }: { user: PlatformUser }) {
-  const [isBanned, setIsBanned] = useState(user.isBanned)
+  const [status, setStatus] = useState(user.status)
   const [isPending, startTransition] = useTransition()
 
   const initials = user.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
+  const isBanned = status === "BANNED"
 
   function handleToggle() {
-    const previous = isBanned
-    const next = !isBanned
-    setIsBanned(next) // optimistic
+    const previous = status
+    const next = isBanned ? "ACTIVE" : "BANNED"
+    setStatus(next) // optimistic
 
     startTransition(async () => {
-      const result = await toggleUserBan(user.id, next)
+      const result = await updateUserStatus(user.id, next)
       if (!result.success) {
-        setIsBanned(previous)
+        setStatus(previous)
         toast.error(result.message || "Could not update user")
       } else {
-        toast.success(next ? "User banned" : "User unbanned")
+        toast.success(next === "BANNED" ? "User banned" : "User unbanned")
       }
     })
   }

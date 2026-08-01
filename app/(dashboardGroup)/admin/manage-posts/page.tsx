@@ -10,7 +10,8 @@ import Image from "next/image"
 import type { Property } from "@/types/auth"
 
 export default async function AdminManagePostsPage() {
-  const properties = await getAllProperties()
+  const result = await getAllProperties()
+  const properties = result.data || []
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-10">

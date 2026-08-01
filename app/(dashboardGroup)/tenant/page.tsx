@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock, Home, CheckCircle, DollarSign, Calendar, Building2 } from "lucide-react"
+import { Clock, Home, CheckCircle, DollarSign, Calendar } from "lucide-react"
 import { getMyRentalRequests } from "../_actions/rentals"
 import { RentalRequestCard } from "../_components/rentals/rental-request-card"
 
@@ -57,48 +57,6 @@ export default async function TenantDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5" />
-              Property Types Requested
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {["APARTMENT", "HOUSE", "STUDIO", "CONDO", "VILLA"].map((type) => {
-                const count = requests.filter((r) => r.property.propertyType === type).length
-                const percentage = requests.length > 0 ? (count / requests.length) * 100 : 0
-                const colors = {
-                  APARTMENT: "bg-blue-500",
-                  HOUSE: "bg-emerald-500",
-                  STUDIO: "bg-purple-500",
-                  CONDO: "bg-orange-500",
-                  VILLA: "bg-pink-500"
-                }
-
-                return (
-                  <div key={type} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium">{type}</span>
-                      <span className="font-semibold">{count}</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full ${colors[type as keyof typeof colors]} rounded-full transition-all duration-500`}
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                )
-              })}
-              {requests.length === 0 && (
-                <p className="text-center text-muted-foreground py-8">No requests yet</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
               Rental Activity
             </CardTitle>
@@ -116,7 +74,7 @@ export default async function TenantDashboardPage() {
                       <span className="font-semibold">{count} requests</span>
                     </div>
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       />
@@ -126,6 +84,38 @@ export default async function TenantDashboardPage() {
               })}
               {requests.length === 0 && (
                 <p className="text-center text-muted-foreground py-8">No activity yet</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Home className="h-5 w-5" />
+              Recent Properties Viewed
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {requests.slice(0, 5).map((request) => (
+                <div key={request.id} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{request.property.title}</p>
+                    <p className="text-xs text-muted-foreground">{request.property.location}</p>
+                  </div>
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    request.status === "APPROVED" ? "bg-emerald-100 text-emerald-800" :
+                    request.status === "PENDING" ? "bg-yellow-100 text-yellow-800" :
+                    request.status === "ACTIVE" ? "bg-blue-100 text-blue-800" :
+                    "bg-gray-100 text-gray-800"
+                  }`}>
+                    {request.status}
+                  </span>
+                </div>
+              ))}
+              {requests.length === 0 && (
+                <p className="text-center text-muted-foreground py-8">No properties viewed yet</p>
               )}
             </div>
           </CardContent>

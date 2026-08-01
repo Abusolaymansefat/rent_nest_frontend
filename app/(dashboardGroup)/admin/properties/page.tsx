@@ -1,16 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, Eye } from "lucide-react"
-import { getAllProperties, removeProperty } from "../../_actions/admin"
-// import { DeletePropertyButton } from "./delete-property-button"
+import {  Eye } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import type { Property } from "@/types/auth"
 import { DeletePropertyButton } from "./delete-property-button"
+import { getAllProperties } from "../../_actions/admin"
 
 export default async function AdminPropertiesPage() {
-  const properties = await getAllProperties()
+  const result = await getAllProperties()
+  const properties = result.data || []
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -28,11 +28,11 @@ export default async function AdminPropertiesPage() {
               {properties.map((property) => (
                 <div key={property.id} className="flex items-center gap-4 border-b py-4 last:border-b-0">
                   <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
-                    <Image 
-                      src={property.images[0] || "/placeholder-property.jpg"} 
-                      alt={property.title} 
-                      fill 
-                      className="object-cover" 
+                    <Image
+                      src={property.images[0] || "/placeholder-property.jpg"}
+                      alt={property.title}
+                      fill
+                      className="object-cover"
                     />
                   </div>
 
@@ -41,7 +41,7 @@ export default async function AdminPropertiesPage() {
                       {property.title}
                     </Link>
                     <p className="text-sm text-muted-foreground">{property.location} · ${property.price}/mo</p>
-                    <p className="text-xs text-muted-foreground">Landlord: {property.landlord.name}</p>
+                    <p className="text-xs text-muted-foreground">Landlord: {property.landlordName}</p>
                   </div>
 
                   <Badge variant={property.availability === "AVAILABLE" ? "default" : "secondary"}>

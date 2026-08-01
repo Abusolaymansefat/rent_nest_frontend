@@ -1,4 +1,5 @@
 export type Role = "TENANT" | "LANDLORD" | "ADMIN"
+export type UserStatus = "ACTIVE" | "BANNED"
 
 export type FormState = {
   success: boolean
@@ -81,11 +82,6 @@ export type Property = {
   updatedAt: string
 }
 
-export type Category = {
-  id: string
-  name: string
-}
-
 export type PropertyFilters = {
   location?: string
   minPrice?: string
@@ -95,18 +91,19 @@ export type PropertyFilters = {
   page?: string
 }
 
+// meta তে totalPages ব্যাকএন্ড পাঠায় না — page/limit/total দিয়ে frontend এ হিসাব করতে হয়
+export type PaginationMeta = {
+  page: number
+  limit: number
+  total: number
+}
+
 export type PaginatedResponse<T> = {
   success: boolean
   message: string
   data: T[]
-  meta?: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
+  meta?: PaginationMeta
 }
-
 
 export type RentalRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED"
 
@@ -140,32 +137,59 @@ export type Payment = {
   createdAt: string
 }
 
+// ---------------- ADMIN ----------------
+
 export type PlatformUser = {
   id: string
   name: string
   email: string
   phone: string | null
   avatar: string | null
-  role: "TENANT" | "LANDLORD" | "ADMIN"
-  isBanned: boolean
+  role: Role
+  status: UserStatus
   createdAt: string
 }
 
-export type PlatformStats = {
+export type AdminDashboardStats = {
   totalUsers: number
+  totalLandlords: number
+  totalTenants: number
   totalProperties: number
-  pendingRequests: number
-  totalRevenue: number
+  totalRentals: number
+  totalCompletedRentals: number
 }
 
-export type PaginatedUsers = {
+export type UserQueryParams = {
+  searchTerm?: string
+  role?: string
+  status?: UserStatus
+  page?: string
+  limit?: string
+}
+
+export type PropertyQueryParams = {
+  searchTerm?: string
+  location?: string
+  availability?: PropertyAvailability
+  page?: string
+  limit?: string
+}
+
+export type RentalQueryParams = {
+  status?: RentalRequestStatus
+  page?: string
+  limit?: string
+}
+
+export type Category = {
+  id: string
+  name: string
+  slug: string
+  icon: string | null
+  createdAt: string
+}
+
+export type CategoryFormState = {
   success: boolean
-  message: string
-  data: PlatformUser[]
-  meta?: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
+  message?: string
 }
