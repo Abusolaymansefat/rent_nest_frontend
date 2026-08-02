@@ -37,7 +37,7 @@ export function RentalRequestCard({ request }: { request: RentalRequest }) {
               <Link href={`/tenant/requests/${request.id}/pay`}>Pay Now</Link>
             </Button>
           )}
-          {request.status === "ACTIVE" && (
+          {request.status === "COMPLETED" && (
             <Button asChild variant="outline" className="rounded-full">
               <Link href={`/tenant/requests/${request.id}/review`}>Leave Review</Link>
             </Button>

@@ -1,15 +1,19 @@
+// import { getMyRentalRequests } from "@/app/(dashboardGroup)/_actions/rentals"
+// import { ReviewForm } from "@/app/(dashboardGroup)/_components/rentals/review-form"
+import { notFound, redirect } from "next/navigation"
+import type { RentalRequest } from "@/types/auth"
 import { getMyRentalRequests } from "@/app/(dashboardGroup)/_actions/rentals"
 import { ReviewForm } from "@/app/(dashboardGroup)/_components/rentals/review-form"
-import { notFound, redirect } from "next/navigation"
 
 
 export default async function ReviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const requests = await getMyRentalRequests()
-  const request = requests.find((r) => r.id === id)
+  const request = requests.find((r: RentalRequest) => r.id === id)
 
   if (!request) notFound()
-  if (request.status !== "ACTIVE" && request.status !== "COMPLETED") {
+
+  if (request.status !== "COMPLETED") {
     redirect("/tenant")
   }
 
@@ -17,7 +21,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     <div className="container mx-auto max-w-lg px-4 py-10">
       <h1 className="mb-1 text-2xl font-bold">Leave a Review</h1>
       <p className="mb-6 text-muted-foreground">{request.property.title}</p>
-      <ReviewForm propertyId={request.propertyId} />
+      <ReviewForm rentalRequestId={request.id} />
     </div>
   )
 }

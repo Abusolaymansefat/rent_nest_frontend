@@ -25,9 +25,9 @@ type SearchParams = {
 export default async function PropertiesPage({
   searchParams,
 }: {
-  searchParams: Promise<SearchParams>
+  searchParams?: Promise<SearchParams>
 }) {
-  const filters = await searchParams
+  const filters = searchParams ? await searchParams : {}
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -45,25 +45,38 @@ export default async function PropertiesPage({
 }
 
 async function PropertyResults({ filters }: { filters: SearchParams }) {
+  // Handle case where filters might be undefined
+  if (!filters) {
+    const { data: properties, meta } = await getProperties({})
+    const totalPages = meta ? Math.ceil(meta.total / meta.limit) : 1
+
+    return (
+      <div>
+        <PropertyGrid properties={properties} />
+        <PropertyPagination page={1} totalPages={totalPages} buildHref={(page) => `/properties?page=${page}`} />
+      </div>
+    )
+  }
+
   // Filter out null values before passing to getProperties
   const cleanFilters: PropertyFiltersType = {
-    location: filters?.location || undefined,
-    minPrice: filters?.minPrice || undefined,
-    maxPrice: filters?.maxPrice || undefined,
-    propertyType: filters?.type || undefined,
-    page: filters?.page || undefined,
+    location: filters.location ?? undefined,
+    minPrice: filters.minPrice ?? undefined,
+    maxPrice: filters.maxPrice ?? undefined,
+    propertyType: filters.type ?? undefined,
+    page: filters.page ?? undefined,
   }
 
   const { data: properties, meta } = await getProperties(cleanFilters)
-  const currentPage = Number(filters?.page) || 1
+  const currentPage = Number(filters.page) || 1
   const totalPages = meta ? Math.ceil(meta.total / meta.limit) : 1
 
   function buildHref(targetPage: number) {
     const params = new URLSearchParams()
-    if (filters?.location) params.set("location", filters.location)
-    if (filters?.minPrice) params.set("minPrice", filters.minPrice)
-    if (filters?.maxPrice) params.set("maxPrice", filters.maxPrice)
-    if (filters?.type) params.set("propertyType", filters.type)
+    if (filters.location) params.set("location", filters.location)
+    if (filters.minPrice) params.set("minPrice", filters.minPrice)
+    if (filters.maxPrice) params.set("maxPrice", filters.maxPrice)
+    if (filters.type) params.set("propertyType", filters.type)
     params.set("page", String(targetPage))
     return `/properties?${params.toString()}`
   }

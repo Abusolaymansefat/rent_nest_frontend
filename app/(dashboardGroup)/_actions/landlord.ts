@@ -130,20 +130,55 @@ export async function updateProperty(
 
 export async function deleteProperty(propertyId: string): Promise<{ success: boolean; message?: string }> {
   try {
-    const res = await fetch(`${process.env.BACKEND_API_URL}/api/landlord/properties/${propertyId}`, {
+    const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
+    
+    // First, try to delete the property directly
+    const res = await fetch(`${apiUrl}/api/landlord/properties/${propertyId}`, {
       method: "DELETE",
       headers: await authHeader(),
     })
     const result = await res.json()
-
-    if (!result.success) {
+    
+    // If deletion fails due to rental requests, delete them first
+    if (!result.success && result.message?.includes("rental request")) {
+      // Get all rentals for this property
+      const rentalsRes = await fetch(`${apiUrl}/api/landlord/requests?propertyId=${propertyId}`, {
+        headers: await authHeader(),
+      })
+      const rentalsData = await rentalsRes.json()
+      
+      if (rentalsData.data && rentalsData.data.length > 0) {
+        // Delete each rental request
+        for (const rental of rentalsData.data) {
+          await fetch(`${apiUrl}/api/landlord/requests/${rental.id}`, {
+            method: "DELETE",
+            headers: await authHeader(),
+          })
+        }
+        
+        // Now try to delete the property again
+        const deleteRes = await fetch(`${apiUrl}/api/landlord/properties/${propertyId}`, {
+          method: "DELETE",
+          headers: await authHeader(),
+        })
+        const deleteResult = await deleteRes.json()
+        
+        if (!deleteResult.success) {
+          return { success: false, message: deleteResult.message || "Could not delete property" }
+        }
+      } else {
+        return { success: false, message: result.message || "Could not delete property" }
+      }
+    } else if (!result.success) {
       return { success: false, message: result.message || "Could not delete property" }
     }
-  } catch {
+  } catch (error) {
+    console.error("Delete property error:", error)
     return { success: false, message: "Server error, please try again" }
   }
 
   revalidatePath("/landlord/properties")
+  revalidatePath("/properties")
   return { success: true }
 }
 

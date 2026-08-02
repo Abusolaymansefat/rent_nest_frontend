@@ -11,6 +11,7 @@ return (
 <main>
 
 <BannerSection/>
+
 <PropertiesPage/>
 
 <WhyChooseUs/>

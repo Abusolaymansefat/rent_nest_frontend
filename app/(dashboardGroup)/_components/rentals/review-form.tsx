@@ -5,12 +5,11 @@ import { Star, Loader2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ReviewFormState, submitReview } from "../../_actions/reviews"
-// import { submitReview, type ReviewFormState } from "@/service/reviews"
 
-const initialState: ReviewFormState= { success: false }
+const initialState: ReviewFormState = { success: false }
 
-export function ReviewForm({ propertyId }: { propertyId: string }) {
-  const boundAction = submitReview.bind(null, propertyId)
+export function ReviewForm({ rentalRequestId }: { rentalRequestId: string }) {
+  const boundAction = submitReview.bind(null, rentalRequestId)
   const [state, formAction, isPending] = useActionState(boundAction, initialState)
   const [rating, setRating] = useState(0)
 
