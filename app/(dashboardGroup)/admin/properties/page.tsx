@@ -41,7 +41,7 @@ export default async function AdminPropertiesPage() {
                       {property.title}
                     </Link>
                     <p className="text-sm text-muted-foreground">{property.location} · ${property.price}/mo</p>
-                    <p className="text-xs text-muted-foreground">Landlord: {property.landlordName}</p>
+                    <p className="text-xs text-muted-foreground">Landlord: {property.landlord.name}</p>
                   </div>
 
                   <Badge variant={property.availability === "AVAILABLE" ? "default" : "secondary"}>

@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { createPaymentSession } from "@/app/(public)/_actions/payments"
-// import { createPaymentSession } from "@/service/payments"
 
 export function PayNowButton({ rentalRequestId }: { rentalRequestId: string }) {
   const [isLoading, setIsLoading] = useState(false)

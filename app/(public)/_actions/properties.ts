@@ -1,6 +1,7 @@
-// import type { Property, Category, PropertyFilters, PaginatedResponse } from "@/types/property"
-
 import { Category, PaginatedResponse, Property, PropertyFilters } from "@/types/auth"
+
+
+const PAGE_SIZE = 6
 
 export async function getProperties(filters: PropertyFilters = {}): Promise<PaginatedResponse<Property>> {
   const params = new URLSearchParams()
@@ -9,7 +10,10 @@ export async function getProperties(filters: PropertyFilters = {}): Promise<Pagi
   if (filters.maxPrice) params.set("maxPrice", filters.maxPrice)
   if (filters.propertyType) params.set("propertyType", filters.propertyType)
   if (filters.categoryId) params.set("categoryId", filters.categoryId)
-  if (filters.page) params.set("page", filters.page)
+  params.set("page", filters.page || "1")
+  params.set("limit", String(PAGE_SIZE))
+  params.set("sortBy", "createdAt")
+  params.set("sortOrder", "desc")
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/properties?${params.toString()}`, {
     next: { revalidate: 60 },
