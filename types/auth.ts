@@ -137,6 +137,35 @@ export type Payment = {
   createdAt: string
 }
 
+export type AdminPayment = {
+  id: string
+  transactionId: string
+  rentalRequestId: string
+  tenantId: string
+  amount: number
+  provider: string
+  status: string
+  createdAt: string
+  paidAt: string | null
+  tenant?: {
+    id: string
+    name: string
+    email: string
+    phone: string | null
+  } | null
+  rentalRequest?: {
+    id: string
+    status: string
+    property?: {
+      id: string
+      title: string
+      location: string
+      price: number
+      landlord?: { name: string } | null
+    } | null
+  } | null
+}
+
 // ---------------- ADMIN ----------------
 
 export type PlatformUser = {

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
-import { AdminDashboardStats, PaginatedResponse, PlatformUser, Property, RentalRequest, UserStatus } from "@/types/auth"
+import { AdminDashboardStats, AdminPayment, PaginatedResponse, PlatformUser, Property, RentalRequest, UserStatus } from "@/types/auth"
 // import type { PaginatedResponse, PlatformUser, DashboardStats, UserStatus } from "@/types/admin"
 // import type { Property } from "@/types/property"
 // import type { RentalRequest } from "@/types/rental"
@@ -110,6 +110,24 @@ export async function getAllRentals(params: {
     cache: "no-store",
   })
   if (!res.ok) return { success: false, message: "Failed to load", data: [] }
+  return res.json()
+}
+
+export async function getAllPayments(params: {
+  status?: string
+  page?: string
+  limit?: string
+} = {}): Promise<PaginatedResponse<AdminPayment>> {
+  const query = new URLSearchParams()
+  if (params.status) query.set("status", params.status)
+  if (params.page) query.set("page", params.page)
+  if (params.limit) query.set("limit", params.limit)
+
+  const res = await fetch(`${process.env.BACKEND_API_URL}/api/admin/payments?${query.toString()}`, {
+    headers: await authHeader(),
+    cache: "no-store",
+  })
+  if (!res.ok) return { success: false, message: "Failed to load payments", data: [] }
   return res.json()
 }
 
