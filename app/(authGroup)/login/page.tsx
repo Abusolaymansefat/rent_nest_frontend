@@ -8,12 +8,18 @@ export const metadata: Metadata = {
   description: "Sign in to your account",
 }
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ redirectTo?: string }>
+}) {
+  const { redirectTo } = searchParams ? await searchParams : {}
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-emerald-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-emerald-50 px-4">
       <div className="w-full max-w-md">
-        <LoginForm />
-        
+        <LoginForm redirectTo={redirectTo} />
+
       </div>
     </div>
   )

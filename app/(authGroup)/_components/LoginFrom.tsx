@@ -11,7 +11,7 @@ import { loginAction } from "../_actions/authAction"
 
 const initialState: FormState = { success: false }
 
-export function LoginForm() {
+export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, formAction, isPending] = useActionState(loginAction, initialState)
 
   return (
@@ -21,6 +21,7 @@ export function LoginForm() {
       </h1>
 
       <form action={formAction} className="space-y-5">
+        <input type="hidden" name="redirectTo" value={redirectTo ?? ""} />
         <div className="space-y-2">
           <label htmlFor="email" className="text-base font-medium">
             Email

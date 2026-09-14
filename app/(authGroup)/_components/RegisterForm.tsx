@@ -75,6 +75,34 @@ export function RegisterForm() {
         </div>
 
         <div className="space-y-2">
+          <label htmlFor="role" className="text-base font-medium">I am joining as</label>
+          <select
+            id="role"
+            name="role"
+            defaultValue="TENANT"
+            required
+            disabled={isPending}
+            className="w-full rounded-full border border-gray-300 bg-background px-5 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+          >
+            <option value="TENANT">Tenant - I am looking for a home</option>
+            <option value="LANDLORD">Landlord - I want to list a property</option>
+            <option value="ADMIN">Admin - Platform moderator</option>
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="phone" className="text-base font-medium">Phone number (optional)</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="+1 234 567 8900"
+            disabled={isPending}
+            className="w-full rounded-full border border-gray-300 px-5 py-3 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+          />
+        </div>
+
+        <div className="space-y-2">
           <label htmlFor="password" className="text-base font-medium">Password</label>
           <input
             id="password"
@@ -92,17 +120,15 @@ export function RegisterForm() {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className={`flex-1 rounded-full transition-colors ${
-                    i <= strength ? strengthColors[strength] : "bg-muted"
-                  }`}
+                  className={`flex-1 rounded-full transition-colors ${i <= strength ? strengthColors[strength] : "bg-muted"
+                    }`}
                 />
               ))}
             </div>
-            <p className={`text-xs ${
-              strength === 0 ? "text-muted-foreground" :
-              strength <= 2 ? "text-red-500" :
-              strength === 3 ? "text-yellow-500" : "text-green-500"
-            }`}>
+            <p className={`text-xs ${strength === 0 ? "text-muted-foreground" :
+                strength <= 2 ? "text-red-500" :
+                  strength === 3 ? "text-yellow-500" : "text-green-500"
+              }`}>
               {strengthLabels[strength]}
             </p>
           </div>

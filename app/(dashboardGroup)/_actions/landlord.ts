@@ -130,15 +130,15 @@ export async function updateProperty(
 
 export async function deleteProperty(propertyId: string): Promise<{ success: boolean; message?: string }> {
   try {
-    const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
-    
+    const apiUrl = process.env.BACKEND_API_URL || "https://rentnestprismabackend.vercel.app"
+
     // First, try to delete the property directly
     const res = await fetch(`${apiUrl}/api/landlord/properties/${propertyId}`, {
       method: "DELETE",
       headers: await authHeader(),
     })
     const result = await res.json()
-    
+
     // If deletion fails due to rental requests, delete them first
     if (!result.success && result.message?.includes("rental request")) {
       // Get all rentals for this property
@@ -146,7 +146,7 @@ export async function deleteProperty(propertyId: string): Promise<{ success: boo
         headers: await authHeader(),
       })
       const rentalsData = await rentalsRes.json()
-      
+
       if (rentalsData.data && rentalsData.data.length > 0) {
         // Delete each rental request
         for (const rental of rentalsData.data) {
@@ -155,14 +155,14 @@ export async function deleteProperty(propertyId: string): Promise<{ success: boo
             headers: await authHeader(),
           })
         }
-        
+
         // Now try to delete the property again
         const deleteRes = await fetch(`${apiUrl}/api/landlord/properties/${propertyId}`, {
           method: "DELETE",
           headers: await authHeader(),
         })
         const deleteResult = await deleteRes.json()
-        
+
         if (!deleteResult.success) {
           return { success: false, message: deleteResult.message || "Could not delete property" }
         }

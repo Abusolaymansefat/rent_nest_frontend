@@ -17,6 +17,7 @@ export const loginAction = async (
 ): Promise<FormState> => {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
+  const redirectTo = formData.get("redirectTo") as string
 
   if (!email || !password) {
     return { success: false, message: "Email and password are required" }
@@ -61,7 +62,7 @@ export const loginAction = async (
     })
   }
 
-  redirect(dashboardUrl)
+  redirect(redirectTo?.startsWith("/") ? redirectTo : dashboardUrl)
 }
 
 export const registerAction = async (
@@ -73,9 +74,10 @@ export const registerAction = async (
   const email = formData.get("email") as string
   const password = formData.get("password") as string
   const confirmPassword = formData.get("confirmPassword") as string
+  const role = formData.get("role") as string
   const terms = formData.get("terms")
 
-  if (!firstName || !lastName || !email || !password || !confirmPassword) {
+  if (!firstName || !lastName || !email || !password || !confirmPassword || !role) {
     return { success: false, message: "All fields are required" }
   }
   if (!terms) {
@@ -95,7 +97,7 @@ export const registerAction = async (
     const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, role }),
     })
     result = await res.json()
   } catch {

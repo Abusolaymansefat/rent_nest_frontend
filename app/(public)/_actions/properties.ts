@@ -36,7 +36,7 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
+  const apiUrl = process.env.BACKEND_API_URL || "https://rentnestprismabackend.vercel.app"
   const res = await fetch(`${apiUrl}/api/categories`, {
     next: { revalidate: 3600 },
   })

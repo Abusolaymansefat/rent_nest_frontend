@@ -115,46 +115,64 @@ export async function getAllRentals(params: {
 
 export async function deleteProperty(propertyId: string): Promise<{ success: boolean; message?: string }> {
   try {
-    const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
-    
-    // First, try to delete the property directly
+    const apiUrl = process.env.BACKEND_API_URL || "https://rentnestprismabackend.vercel.app"
+
     const res = await fetch(`${apiUrl}/api/admin/properties/${propertyId}`, {
       method: "DELETE",
       headers: await authHeader(),
     })
-    const result = await res.json()
-    
-    // If deletion fails due to rental requests, delete them first
-    if (!result.success && result.message?.includes("rental request")) {
-      // Get all rentals for this property
-      const rentalsRes = await fetch(`${apiUrl}/api/admin/rentals?propertyId=${propertyId}`, {
+
+    const responseText = await res.text()
+    const result = responseText ? JSON.parse(responseText) : { success: res.ok }
+
+    if (res.ok && result.success !== false) {
+      revalidatePath("/admin/moderation")
+      revalidatePath("/admin/properties")
+      revalidatePath("/admin/manage-posts")
+      revalidatePath("/properties")
+      revalidatePath("/landlord/properties")
+      return { success: true }
+    }
+
+    const resultMessage = String(result.message ?? "").toLowerCase()
+    const hasRentalDependency = /rental|request|foreign key|constraint/.test(resultMessage)
+
+    if (res.status === 409 || res.status === 400 || hasRentalDependency) {
+      const rentalsRes = await fetch(`${apiUrl}/api/admin/rentals`, {
         headers: await authHeader(),
+        cache: "no-store",
       })
-      const rentalsData = await rentalsRes.json()
-      
-      if (rentalsData.data && rentalsData.data.length > 0) {
-        // Delete each rental request
-        for (const rental of rentalsData.data) {
-          await fetch(`${apiUrl}/api/admin/rentals/${rental.id}`, {
+      const rentalsText = await rentalsRes.text()
+      const rentalsData = rentalsText ? JSON.parse(rentalsText) : { data: [] }
+      const propertyRentals = (rentalsData.data ?? []).filter(
+        (rental: RentalRequest) => rental.propertyId === propertyId || rental.property?.id === propertyId,
+      )
+
+      if (propertyRentals.length > 0) {
+        for (const rental of propertyRentals) {
+          const rentalDeleteRes = await fetch(`${apiUrl}/api/admin/rentals/${rental.id}`, {
             method: "DELETE",
             headers: await authHeader(),
           })
+          if (!rentalDeleteRes.ok) {
+            return { success: false, message: "Could not remove related rental requests" }
+          }
         }
-        
-        // Now try to delete the property again
+
         const deleteRes = await fetch(`${apiUrl}/api/admin/properties/${propertyId}`, {
           method: "DELETE",
           headers: await authHeader(),
         })
-        const deleteResult = await deleteRes.json()
-        
-        if (!deleteResult.success) {
+        const deleteText = await deleteRes.text()
+        const deleteResult = deleteText ? JSON.parse(deleteText) : { success: deleteRes.ok }
+
+        if (!deleteRes.ok || deleteResult.success === false) {
           return { success: false, message: deleteResult.message || "Could not delete property" }
         }
       } else {
         return { success: false, message: result.message || "Could not delete property" }
       }
-    } else if (!result.success) {
+    } else {
       return { success: false, message: result.message || "Could not delete property" }
     }
   } catch (error) {
@@ -173,7 +191,7 @@ export async function deleteProperty(propertyId: string): Promise<{ success: boo
 
 export async function deleteAllProperties(): Promise<{ success: boolean; message?: string }> {
   try {
-    const apiUrl = process.env.BACKEND_API_URL || "http://localhost:5000"
+    const apiUrl = process.env.BACKEND_API_URL || "https://rentnestprismabackend.vercel.app"
     const res = await fetch(`${apiUrl}/api/admin/properties`, {
       method: "DELETE",
       headers: await authHeader(),
