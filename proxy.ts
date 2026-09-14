@@ -30,7 +30,7 @@ export function proxy(request: NextRequest) {
   const user = token ? getTokenPayload(token) : null
 
   if (!user?.id) {
-    const loginUrl = new URL("/login", request.url)
+    const loginUrl = new URL("/auth/login", request.url)
     loginUrl.searchParams.set("redirectTo", pathname)
     return NextResponse.redirect(loginUrl)
   }
