@@ -3,6 +3,8 @@ import { CheckCircle2, XCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { confirmPayment } from "../../_actions/payments"
+import { getCurrentUser } from "@/service/auth"
+import { redirect } from "next/navigation"
 
 export default async function PaymentSuccessPage({
   searchParams,
@@ -28,6 +30,12 @@ export default async function PaymentSuccessPage({
         </Card>
       </div>
     )
+  }
+
+  const user = await getCurrentUser()
+  if (!user) {
+    const successUrl = `/payment/success?session_id=${encodeURIComponent(session_id)}`
+    redirect(`/login?redirectTo=${encodeURIComponent(successUrl)}`)
   }
 
   const result = await confirmPayment(session_id)
